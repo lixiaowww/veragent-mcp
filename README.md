@@ -1,5 +1,7 @@
 # Veragent MCP Server
 
+<!-- mcp-name: io.github.lixiaowww/veragent -->
+
 The trust layer for MCP — as an MCP tool. Let Claude (or any MCP client/agent) check
 whether an MCP tool is **safe before installing it**, look up the most trusted tools,
 or score an entire MCP stack — all backed by the [Veragent](https://veragent.store)

@@ -11,8 +11,16 @@ from typing import Any, Dict, List
 
 import httpx
 
+from . import __version__
+
 API_BASE = os.environ.get("VERAGENT_API_BASE", "https://veragent.store/api/v1").rstrip("/")
 _TIMEOUT = httpx.Timeout(20.0)
+# Identify MCP-server traffic so the backend can count it separately from web users.
+_HEADERS = {"User-Agent": f"veragent-mcp/{__version__}"}
+
+
+def _client() -> httpx.Client:
+    return httpx.Client(timeout=_TIMEOUT, headers=_HEADERS)
 
 
 def _audit_label(audit_status: str, has_report: bool) -> str:
@@ -28,7 +36,7 @@ def _audit_label(audit_status: str, has_report: bool) -> str:
 
 def check_tool_trust(name: str) -> Dict[str, Any]:
     """Look up an MCP tool by name and return its Veragent trust assessment."""
-    with httpx.Client(timeout=_TIMEOUT) as c:
+    with _client() as c:
         r = c.get(f"{API_BASE}/search/agents", params={"q": name, "page": 1, "limit": 5})
         r.raise_for_status()
         agents = (r.json() or {}).get("agents", [])
@@ -72,7 +80,7 @@ def check_tool_trust(name: str) -> Dict[str, Any]:
 
 def list_trusted_tools(query: str = "*", limit: int = 10) -> List[Dict[str, Any]]:
     """Return the most trusted tools matching a query (or overall)."""
-    with httpx.Client(timeout=_TIMEOUT) as c:
+    with _client() as c:
         r = c.get(f"{API_BASE}/search/agents",
                   params={"q": query or "*", "sort_by": "trust_score", "page": 1, "limit": limit})
         r.raise_for_status()
@@ -87,7 +95,7 @@ def list_trusted_tools(query: str = "*", limit: int = 10) -> List[Dict[str, Any]
 
 def scan_mcp_stack(mcp_config: Dict[str, Any]) -> Dict[str, Any]:
     """Score a whole MCP stack. Pass a parsed mcp_settings.json (or its mcpServers block)."""
-    with httpx.Client(timeout=_TIMEOUT) as c:
+    with _client() as c:
         r = c.post(f"{API_BASE}/stack/health-check", json={"mcp_config": mcp_config})
         r.raise_for_status()
         rep = r.json()

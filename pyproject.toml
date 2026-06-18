@@ -1,6 +1,6 @@
 [project]
 name = "veragent-mcp"
-version = "0.1.0"
+version = "0.1.2"
 description = "Veragent MCP server — check the trust/security score of MCP tools before installing them in Claude."
 readme = "README.md"
 requires-python = ">=3.10"
