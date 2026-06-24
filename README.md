@@ -7,6 +7,8 @@ whether an MCP tool is **safe before installing it**, look up the most trusted t
 or score an entire MCP stack — all backed by the [Veragent](https://veragent.store)
 trust registry.
 
+> ⭐ **Star this repo** &nbsp;·&nbsp; `uvx veragent-mcp` — check any tool's trust before you install &nbsp;·&nbsp; **[Get your tool SGC Certified →](https://veragent.store)** &nbsp;·&nbsp; [How we audit (open methodology) →](https://github.com/lixiaowww/veragent-audit)
+
 ## Tools
 
 | Tool | What it does |
